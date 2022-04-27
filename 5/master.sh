@@ -62,4 +62,7 @@ echo "[TASK 12] Dynamically provisioning persistent local storage with Kubernete
 kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml >/dev/null 2>&1
 kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' >/dev/null 2>&1
 
+echo "[TASK 13] Git Clone"
+git clone https://github.com/gasida/book-k8s-network.git /root/book-k8s-network >/dev/null 2>&1
+
 echo ">>>> K8S Controlplane Config End <<<<"
