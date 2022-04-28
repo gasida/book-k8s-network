@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--nicpromisc2", "allow-vms"]
         v.name = "#{cni_N}-k8s-m"
         v.memory = 2048
-        v.cpus = 4
+        v.cpus = 2 
         v.linked_clone = true
       end
       subconfig.vm.hostname = "k8s-m"
