@@ -60,4 +60,7 @@ apt-get install -y kubelet=$2-00 kubectl=$2-00 kubeadm=$2-00 >/dev/null 2>&1
 apt-mark hold kubelet kubeadm kubectl >/dev/null 2>&1
 systemctl enable kubelet && systemctl start kubelet
 
+echo "[TASK 12] Git Clone"
+git clone https://github.com/gasida/book-k8s-network.git /root/book-k8s-network >/dev/null 2>&1
+
 echo ">>>> Initial Config End <<<<"
