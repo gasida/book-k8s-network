@@ -2,8 +2,8 @@
 
 echo ">>>> K8S Controlplane config Start <<<<"
 
-echo "[TASK 1] Initial Kubernetes - Pod CIDR 172.16.0.0/16 , API Server 192.168.10.10"
-kubeadm init --token 123456.1234567890123456 --token-ttl 0 --pod-network-cidr=172.16.0.0/16 --apiserver-advertise-address=192.168.10.10 >/dev/null 2>&1
+echo "[TASK 1] Initial Kubernetes - Pod CIDR 172.16.0.0/16 , Service CIDR 10.200.1.0/24 , API Server 192.168.10.10"
+kubeadm init --token 123456.1234567890123456 --token-ttl 0 --pod-network-cidr=172.16.0.0/16 --apiserver-advertise-address=192.168.10.10 --service-cidr 10.200.1.0/24 >/dev/null 2>&1
 
 echo "[TASK 2] Setting kube config file"
 mkdir -p $HOME/.kube
@@ -21,10 +21,8 @@ chmod +x calicoctl && mv calicoctl /usr/bin
 echo "[TASK 5] Source the completion"
 # source bash-completion for kubectl kubeadm
 source <(kubectl completion bash)
-source <(kubeadm completion bash)
 ## Source the completion script in your ~/.bashrc file
 echo 'source <(kubectl completion bash)' >> /etc/profile
-echo 'source <(kubeadm completion bash)' >> /etc/profile
 
 echo "[TASK 6] Alias kubectl to k"
 echo 'alias k=kubectl' >> /etc/profile

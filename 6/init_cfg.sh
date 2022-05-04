@@ -39,15 +39,44 @@ echo "[TASK 7] Setting Local DNS Using Hosts file"
 echo "192.168.10.10 k8s-m" >> /etc/hosts
 for (( i=1; i<=$1; i++  )); do echo "192.168.10.10$i k8s-w$i" >> /etc/hosts; done
 
-echo "[TASK 8] Install Docker Engine"
-curl -fsSL https://get.docker.com | sh >/dev/null 2>&1
+# echo "[TASK 8] Install Docker Engine"
+# curl -fsSL https://get.docker.com | sh >/dev/null 2>&1
 
-echo "[TASK 9] Change Cgroup Driver Using Systemd"
-cat <<EOT > /etc/docker/daemon.json
-{"exec-opts": ["native.cgroupdriver=systemd"]}
-EOT
-systemctl daemon-reload >/dev/null 2>&1
-systemctl restart docker
+# echo "[TASK 9] Change Cgroup Driver Using Systemd"
+# cat <<EOT > /etc/docker/daemon.json
+# {"exec-opts": ["native.cgroupdriver=systemd"]}
+# EOT
+# systemctl daemon-reload >/dev/null 2>&1
+# systemctl restart docker
+
+echo "[TASK 8] Install containerd.io"
+# Install Runtime - Containerd https://kubernetes.io/docs/setup/production-environment/container-runtimes/
+cat <<EOF > /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+modprobe overlay
+modprobe br_netfilter
+
+cat <<EOF > /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+sysctl -p >/dev/null 2>&1
+sysctl --system >/dev/null 2>&1
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update >/dev/null 2>&1
+apt-get install containerd.io -y >/dev/null 2>&1
+mkdir -p /etc/containerd
+containerd config default > /etc/containerd/config.toml
+
+echo "[TASK 9] Using the systemd cgroup driver"
+#sed -i'' -r -e "/runc.options/a\            SystemdCgroup = true" /etc/containerd/config.toml
+sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+systemctl restart containerd
 
 echo "[TASK 10] Disable and turn off SWAP"
 swapoff -a
