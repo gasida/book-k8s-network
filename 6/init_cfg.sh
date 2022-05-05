@@ -74,7 +74,6 @@ mkdir -p /etc/containerd
 containerd config default > /etc/containerd/config.toml
 
 echo "[TASK 9] Using the systemd cgroup driver"
-#sed -i'' -r -e "/runc.options/a\            SystemdCgroup = true" /etc/containerd/config.toml
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 systemctl restart containerd
 
