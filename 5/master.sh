@@ -2,8 +2,8 @@
 
 echo ">>>> K8S Controlplane config Start <<<<"
 
-echo "[TASK 1] Initial Kubernetes - Pod CIDR 172.16.0.0/16 , API Server 192.168.10.10"
-kubeadm init --token 123456.1234567890123456 --token-ttl 0 --pod-network-cidr=172.16.0.0/16 --apiserver-advertise-address=192.168.10.10 >/dev/null 2>&1
+echo "[TASK 1] Initial Kubernetes - Pod CIDR 172.16.0.0/16 , Service CIDR 10.200.1.0/24 , API Server 192.168.10.10"
+kubeadm init --token 123456.1234567890123456 --token-ttl 0 --pod-network-cidr=172.16.0.0/16 --apiserver-advertise-address=192.168.10.10 --service-cidr 10.200.1.0/24 >/dev/null 2>&1
 
 echo "[TASK 2] Setting kube config file"
 mkdir -p $HOME/.kube
@@ -55,9 +55,5 @@ curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | 
 
 echo "[TASK 11] Install Metrics server - v0.6.1"
 kubectl apply -f https://raw.githubusercontent.com/gasida/KANS/main/8/metrics-server.yaml >/dev/null 2>&1
-
-echo "[TASK 12] Dynamically provisioning persistent local storage with Kubernetes - v0.0.22"
-kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml >/dev/null 2>&1
-kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' >/dev/null 2>&1
 
 echo ">>>> K8S Controlplane Config End <<<<"
