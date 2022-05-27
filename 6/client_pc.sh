@@ -54,4 +54,8 @@ echo "[TASK 11] Alias kubectl to k"
 echo 'alias k=kubectl' >> /etc/profile
 echo 'complete -F __start_kubectl k' >> /etc/profile
 
+echo "[TASK 12] Install Apache"
+apt install apache2 -y >/dev/null 2>&1
+echo -e "<h1>Web Server : $(hostname)</h1>" > /var/www/html/index.html
+
 echo ">>>> Client config End <<<<"
