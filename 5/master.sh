@@ -21,10 +21,8 @@ chmod +x calicoctl && mv calicoctl /usr/bin
 echo "[TASK 5] Source the completion"
 # source bash-completion for kubectl kubeadm
 source <(kubectl completion bash)
-source <(kubeadm completion bash)
 ## Source the completion script in your ~/.bashrc file
 echo 'source <(kubectl completion bash)' >> /etc/profile
-echo 'source <(kubeadm completion bash)' >> /etc/profile
 
 echo "[TASK 6] Alias kubectl to k"
 echo 'alias k=kubectl' >> /etc/profile
