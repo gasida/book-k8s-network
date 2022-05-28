@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-1
+  annotations:
+    #nginx.ingress.kubernetes.io/upstream-hash-by: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: svc1-web
+              port:
+                number: 80
+        - path: /guest
+          pathType: Prefix
+          backend:
+            service:
+              name: svc2-guest
+              port:
+                number: 8080
+        - path: /admin
+          pathType: Prefix
+          backend:
+            service:
+              name: svc3-admin
+              port:
+                number: 8080
