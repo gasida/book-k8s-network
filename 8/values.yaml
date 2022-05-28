@@ -1,0 +1,13 @@
+controller:
+  service:
+    type: NodePort
+    nodePorts:
+      http: 32080
+      https: 32443
+  tolerations: 
+    - key: "node-role.kubernetes.io"
+      operator: "Equal"
+      value: "master"
+      effect: "NoSchedule"
+  nodeSelector:
+    kubernetes.io/hostname: "k8s-m"
